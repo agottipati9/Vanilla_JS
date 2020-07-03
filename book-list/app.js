@@ -71,18 +71,18 @@ document.getElementById('book-form').addEventListener('submit', function(e){
   // Do not accept blank fields
   if (title === '' || author === '' || isbn === ''){
     ui.showAlert('Please enter in the required information.', 'error')
-    return;
   }
+  else{
+    // Add book to libary
+    const book = new Book(title, author, isbn);
+    ui.addBooktoLib(book);
 
-  // Add book to libary
-  const book = new Book(title, author, isbn);
-  ui.addBooktoLib(book);
+    // Show success
+    ui.showAlert('Book has been added to library.', 'success');
 
-  // Show success
-  ui.showAlert('Book has been added to library.', 'success');
-
-  // Clear fields
-  ui.clearFields();
+    // Clear fields
+    ui.clearFields();
+  }
   e.preventDefault();
 });
 
