@@ -23,7 +23,7 @@ class Store{
     return books;
   }
 
-  // Displays books in the ui
+  // Displays books on the ui
   static displayBooks(){
     let books = Store.getBooks();
     const ui = new UI();
