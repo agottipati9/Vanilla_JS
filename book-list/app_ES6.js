@@ -65,6 +65,7 @@ class UI {
     // create tr element
     const row = document.createElement('tr');
 
+    // update html
     row.innerHTML = `
     <td>${book.title}</td>
     <td>${book.author}</td>
