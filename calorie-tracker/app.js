@@ -116,6 +116,7 @@ const uiCtrl = (function(){
     updateBtn: '.update-btn',
     deleteBtn: '.delete-btn',
     backBtn: '.back-btn',
+    clearAllBtn: '.clear-btn',
     itemNameInput: '#item-name',
     itemCalorieInput: '#item-calories',
     totalCalories: '.total-calories',
@@ -257,10 +258,36 @@ const appCtrl = (function(itemCtrl, uiCtrl){
 
     // Delete Item Event
     document.querySelector(selectors.deleteBtn).addEventListener('click', itemDeleteSubmit);
+
+    // Clear All
+    document.querySelector(selectors.clearAllBtn).addEventListener('click',clearAllSubmit);
     
     // Back event
     document.querySelector(selectors.backBtn).addEventListener('click', uiCtrl.clearEditState);
   };
+
+  const clearAllSubmit = function(e){
+    // Get all items
+    const allItems = itemCtrl.getItems();
+
+    console.log(allItems);
+
+    // Remove all items
+    allItems.forEach(function(item){
+      // Delete Item from backend
+      itemCtrl.deleteItem(item.id);
+
+      // Delete item from ui
+      uiCtrl.deleteListItem(item.id);
+    });
+
+    // Update Total Calories
+    const totalCalories = itemCtrl.getTotalCalories();
+    uiCtrl.showTotalCalories(totalCalories);
+
+    uiCtrl.clearEditState();
+    e.preventDefault();
+  }
 
   // Item delete submit
   const itemDeleteSubmit = function(e){
