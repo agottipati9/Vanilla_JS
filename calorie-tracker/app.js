@@ -66,6 +66,19 @@ const itemCtrl = (function(){
       return updateItem;
     },
 
+    deleteItem: function(id){
+      // Get ids
+      ids = data.items.map(function(item){
+        return item.id;
+      });
+
+      // Get index
+      const index = ids.indexOf(id);
+
+      // Remove item
+      data.items.splice(index, 1);
+    },
+
     getItemByID: function(id){
       let currentItem = null;
       data.items.forEach(function(item){
@@ -171,6 +184,12 @@ const uiCtrl = (function(){
 
     },
 
+    deleteListItem: function(id){
+      const itemID = `#item-${id}`;
+      const item = document.querySelector(itemID);
+      item.remove();
+    },
+
     clearInput: function(){
       document.querySelector(uiSelectors.itemNameInput).value = '';
       document.querySelector(uiSelectors.itemCalorieInput).value = '';
@@ -237,14 +256,27 @@ const appCtrl = (function(itemCtrl, uiCtrl){
     document.querySelector(selectors.updateBtn).addEventListener('click', itemUpdateSubmit);
 
     // Delete Item Event
-    // document.querySelector(selectors.itemList).addEventListener('click', itemUpdateSubmit);
+    document.querySelector(selectors.deleteBtn).addEventListener('click', itemDeleteSubmit);
     
     // Back event
-    document.querySelector(selectors.backBtn).addEventListener('click', backClick);
+    document.querySelector(selectors.backBtn).addEventListener('click', uiCtrl.clearEditState);
   };
 
-  // Return to initial screen
-  const backClick = function(e){
+  // Item delete submit
+  const itemDeleteSubmit = function(e){
+    // Get current item
+    const currentItem = itemCtrl.getCurrentItem();
+
+    // Delete Item from backend
+    itemCtrl.deleteItem(currentItem.id);
+
+    // Delete item from ui
+    uiCtrl.deleteListItem(currentItem.id);
+
+    // Update Total Calories
+    const totalCalories = itemCtrl.getTotalCalories();
+    uiCtrl.showTotalCalories(totalCalories);
+
     uiCtrl.clearEditState();
     e.preventDefault();
   }
